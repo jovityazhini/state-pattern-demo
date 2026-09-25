@@ -77,6 +77,7 @@ Extract each state into its own class implementing a common interface. The `Cont
 public void selectProduct(String item) {
     currentState.selectProduct(this, item);
 }
+GitHub Pages deployment test
 ```
 
 ---
