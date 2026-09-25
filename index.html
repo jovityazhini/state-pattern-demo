@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Design Pattern | Interactive Guide</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- 1. NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand">
+        <span class="brand-icon">🔄</span>
+        <span class="brand-text">StatePattern<span class="brand-accent">.guide</span></span>
+      </a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-menu" id="navMenu">
+        <a href="#intro" class="nav-link">Introduction</a>
+        <a href="#problem" class="nav-link">Problem & Solution</a>
+        <a href="#how-it-works" class="nav-link">Mechanics</a>
+        <a href="#uml" class="nav-link">UML Diagram</a>
+        <a href="#interactive-demo" class="nav-link highlight">Interactive Demo</a>
+        <a href="#java-impl" class="nav-link">Java Code</a>
+        <a href="#tradeoffs" class="nav-link">Tradeoffs</a>
+        <a href="#quiz" class="nav-link">Quiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 2. HERO SECTION -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-content">
+        <div class="academic-badge">
+          <span class="academic-icon">🎓</span> Software Engineering & Design Patterns Guide
+        </div>
+        
+        <h1 class="hero-title">
+          State Design Pattern
+          <span class="hero-subtitle-tag">Behavioral Object State Encapsulation</span>
+        </h1>
+        
+        <p class="hero-explanation">
+          A fundamental Gang of Four (GoF) behavioral pattern that allows an object to alter its behavior when its internal state changes, replacing complex conditional logic with clean, state-specific object delegation.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#intro" class="btn btn-primary btn-lg">Explore Pattern 📖</a>
+          <a href="#interactive-demo" class="btn btn-secondary btn-lg">Try Interactive Demo 🎮</a>
+        </div>
+
+        <div class="hero-highlights-grid">
+          <div class="highlight-item">
+            <span class="highlight-icon">🏛️</span>
+            <div>
+              <strong>GoF Architectural Standard</strong>
+              <p>Encapsulates state-specific behavior into separate polymorphic classes.</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">⚡</span>
+            <div>
+              <strong>Eliminates Conditionals</strong>
+              <p>Replaces brittle <code>if-else</code> & <code>switch</code> blocks with dynamic delegation.</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-icon">🤖</span>
+            <div>
+              <strong>Live Vending Simulation</strong>
+              <p>Real-time OOP state machine visualizer with live event logging.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. INTRODUCTION TO STATE DESIGN PATTERN -->
+    <section id="intro" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>3. Introduction to State Design Pattern</h2>
+          <p class="section-lead">A beginner-friendly guide to understanding dynamic object behaviors.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card intro-card">
+            <div class="card-icon">💡</div>
+            <h3>What is the State Pattern?</h3>
+            <p>
+              Think of a <strong>Smartphone</strong>. When it is <em>Locked</em>, tapping the screen shows the clock. When it is <em>Unlocked</em>, tapping the screen opens an app.
+            </p>
+            <p>
+              The phone is the exact same object, but its <strong>behavior changes completely depending on its current state</strong>. The State Design Pattern brings this exact real-world concept into software programming.
+            </p>
+          </div>
+
+          <div class="card intro-card highlight-card">
+            <div class="card-icon">🎯</div>
+            <h3>Core Idea in Simple Terms</h3>
+            <blockquote class="quote">
+              "Instead of putting all state logic into one giant file with lots of <code>if-else</code> checks, put each state's rules into its own separate class."
+            </blockquote>
+            <ul class="check-list">
+              <li>Every state (like <em>Idle</em> or <em>Dispensing</em>) gets its own dedicated class.</li>
+              <li>The main machine delegates work to whichever state class is currently active.</li>
+              <li>State transitions happen smoothly by swapping active state objects.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WHAT PROBLEM DOES THE STATE PATTERN SOLVE? -->
+    <section id="problem" class="section bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>4. What Problem Does it Solve?</h2>
+          <p class="section-lead">Say goodbye to "Spaghetti Conditionals" and unmaintainable code.</p>
+        </div>
+
+        <!-- VISUAL DIAGRAM COMPARISON -->
+        <div class="visual-concept-container">
+          <div class="visual-box problem-vis">
+            <div class="vis-header">
+              <span class="vis-tag bad">❌ WITHOUT STATE PATTERN</span>
+              <h3>Messy If-Else Spaghetti</h3>
+            </div>
+            <div class="vis-diagram">
+              <div class="vis-node main-node">User Action</div>
+              <div class="vis-arrow">➔</div>
+              <div class="vis-node code-node bad-code-node">
+                <code>if (state == IDLE) { ... }</code><br>
+                <code>else if (state == HAS_MONEY) { ... }</code><br>
+                <code>else if (state == DISPENSING) { ... }</code>
+              </div>
+            </div>
+            <p class="vis-caption">Adding a single new state forces you to edit every method in your code, leading to bugs and hard-to-read programs.</p>
+          </div>
+
+          <div class="visual-box solution-vis">
+            <div class="vis-header">
+              <span class="vis-tag good">✅ WITH STATE PATTERN</span>
+              <h3>Clean Object Delegation</h3>
+            </div>
+            <div class="vis-diagram">
+              <div class="vis-node main-node">User Action</div>
+              <div class="vis-arrow">➔</div>
+              <div class="vis-node context-node">Context (Machine)</div>
+              <div class="vis-arrow">➔</div>
+              <div class="vis-node state-node active-state-node">Active State Object</div>
+            </div>
+            <p class="vis-caption">The main machine doesn't care about state rules. It simply forwards the request to the active state class.</p>
+          </div>
+        </div>
+
+        <div class="comparison-container">
+          <div class="comparison-box bad">
+            <div class="comparison-header">
+              <span class="status-badge bad">❌ Bad Approach: Multi-branch Conditionals</span>
+            </div>
+            <div class="comparison-body">
+              <pre class="code-block"><code>// Hard to read & risky to modify!
+public void selectProduct() {
+  if (state == IDLE) {
+    print("Insert money first!");
+  } else if (state == HAS_MONEY) {
+    state = PRODUCT_SELECTED;
+    print("Product chosen.");
+  } else if (state == DISPENSING) {
+    print("Please wait, dispensing!");
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="comparison-box good">
+            <div class="comparison-header">
+              <span class="status-badge good">✅ Good Approach: State Pattern Polymorphism</span>
+            </div>
+            <div class="comparison-body">
+              <pre class="code-block"><code>// Simple, clean, & 100% modular!
+public void selectProduct() {
+  // Delegate directly to the current state object
+  currentState.selectProduct(this);
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. HOW BEHAVIOR CHANGES BASED ON STATE -->
+    <section id="how-it-works" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>5. How Behavior Changes Based on State</h2>
+          <p class="section-lead">A step-by-step walk-through of state delegation.</p>
+        </div>
+
+        <div class="behavior-cards-grid">
+          <div class="card behavior-card">
+            <div class="behavior-step">1</div>
+            <h3>User Triggers Action</h3>
+            <p>The user presses a button (like "Insert Money" or "Select Product") on the main Context machine.</p>
+          </div>
+
+          <div class="card behavior-card">
+            <div class="behavior-step">2</div>
+            <h3>Context Forwards Call</h3>
+            <p>The Context machine doesn't execute logic directly. It passes the request to its <code>currentState</code> instance.</p>
+          </div>
+
+          <div class="card behavior-card">
+            <div class="behavior-step">3</div>
+            <h3>Active State Responds</h3>
+            <p>Whichever state is active (Idle, HasMoney, etc.) executes its custom response logic for that action.</p>
+          </div>
+
+          <div class="card behavior-card">
+            <div class="behavior-step">4</div>
+            <h3>State Switch Occurs</h3>
+            <p>If the action is valid, the state object tells the Context to swap to the next State object (e.g., Idle ➔ HasMoney).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. BASIC STRUCTURE OF THE PATTERN -->
+    <section id="components" class="section bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>6. Basic Structure of the State Pattern</h2>
+          <p class="section-lead">The 3 essential building blocks that make up the pattern.</p>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card structure-card">
+            <div class="structure-badge">Building Block 1</div>
+            <div class="card-icon">🏛️</div>
+            <h3>Context</h3>
+            <p><strong>(e.g., Vending Machine)</strong></p>
+            <p>The primary class the user interacts with. It holds a variable pointing to the current state and delegates actions to it.</p>
+          </div>
+
+          <div class="card structure-card">
+            <div class="structure-badge">Building Block 2</div>
+            <div class="card-icon">📋</div>
+            <h3>State Interface</h3>
+            <p><strong>(e.g., VendingMachineState)</strong></p>
+            <p>The blueprint interface listing all actions that can be performed (like <code>insertMoney()</code>, <code>selectProduct()</code>, <code>dispense()</code>).</p>
+          </div>
+
+          <div class="card structure-card">
+            <div class="structure-badge">Building Block 3</div>
+            <div class="card-icon">⚙️</div>
+            <h3>Concrete States</h3>
+            <p><strong>(IdleState, HasMoneyState, etc.)</strong></p>
+            <p>Separate classes implementing the State Interface. Each class defines how the machine behaves in that specific state.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. UML / CLASS DIAGRAM -->
+    <section id="uml" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>7. UML Class Diagram</h2>
+          <p class="section-lead">Canonical architectural structure and realization of the State Design Pattern.</p>
+        </div>
+
+        <div class="uml-wrapper">
+          <div class="svg-container">
+            <svg viewBox="0 0 900 500" class="uml-svg" role="img" aria-label="State Design Pattern UML Class Diagram" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="uml-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f46e5"/>
+                </marker>
+                <marker id="uml-realize" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff" stroke="#475569" stroke-width="1.5"/>
+                </marker>
+              </defs>
+
+              <!-- 1. CONTEXT CLASS -->
+              <g class="uml-class-box" transform="translate(330, 25)">
+                <rect width="240" height="130" rx="8" class="uml-box-bg context-bg"/>
+                <text x="120" y="30" class="uml-stereotype">&lt;&lt;Context&gt;&gt;</text>
+                <text x="120" y="52" class="uml-title font-bold">Context</text>
+                <line x1="0" y1="62" x2="240" y2="62" class="uml-divider"/>
+                <text x="15" y="82" class="uml-member">- state: State</text>
+                <line x1="0" y1="92" x2="240" y2="92" class="uml-divider"/>
+                <text x="15" y="112" class="uml-member">+ request()</text>
+              </g>
+
+              <!-- Arrow: Context -> State Interface -->
+              <path d="M 450 155 L 450 205" stroke="#4f46e5" stroke-width="2" marker-end="url(#uml-arrow)"/>
+              <rect x="405" y="168" width="90" height="20" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+              <text x="450" y="182" class="uml-label">delegates</text>
+
+              <!-- 2. STATE INTERFACE -->
+              <g class="uml-class-box" transform="translate(320, 210)">
+                <rect width="260" height="110" rx="8" class="uml-box-bg interface-bg"/>
+                <text x="130" y="28" class="uml-stereotype">&lt;&lt;Interface&gt;&gt;</text>
+                <text x="130" y="50" class="uml-title font-bold">State</text>
+                <line x1="0" y1="60" x2="260" y2="60" class="uml-divider"/>
+                <text x="15" y="85" class="uml-member">+ handle(context)</text>
+              </g>
+
+              <!-- Realization Lines connecting Concrete States to State Interface -->
+              <path d="M 450 320 L 450 360" stroke="#475569" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#uml-realize)"/>
+              <path d="M 140 360 L 760 360" stroke="#475569" stroke-width="2" stroke-dasharray="4,4"/>
+              <path d="M 140 360 L 140 390" stroke="#475569" stroke-width="2" stroke-dasharray="4,4"/>
+              <path d="M 450 360 L 450 390" stroke="#475569" stroke-width="2" stroke-dasharray="4,4"/>
+              <path d="M 760 360 L 760 390" stroke="#475569" stroke-width="2" stroke-dasharray="4,4"/>
+
+              <!-- 3. CONCRETE STATES -->
+              <!-- Concrete State A -->
+              <g class="uml-class-box" transform="translate(40, 390)">
+                <rect width="200" height="95" rx="6" class="uml-box-bg state-bg"/>
+                <text x="100" y="28" class="uml-title font-bold">ConcreteStateA</text>
+                <text x="100" y="44" class="uml-small">(e.g., IdleState)</text>
+                <line x1="0" y1="52" x2="200" y2="52" class="uml-divider"/>
+                <text x="15" y="74" class="uml-member">+ handle(context)</text>
+              </g>
+
+              <!-- Concrete State B -->
+              <g class="uml-class-box" transform="translate(350, 390)">
+                <rect width="200" height="95" rx="6" class="uml-box-bg state-bg"/>
+                <text x="100" y="28" class="uml-title font-bold">ConcreteStateB</text>
+                <text x="100" y="44" class="uml-small">(e.g., HasMoneyState)</text>
+                <line x1="0" y1="52" x2="200" y2="52" class="uml-divider"/>
+                <text x="15" y="74" class="uml-member">+ handle(context)</text>
+              </g>
+
+              <!-- Concrete State C -->
+              <g class="uml-class-box" transform="translate(660, 390)">
+                <rect width="200" height="95" rx="6" class="uml-box-bg state-bg"/>
+                <text x="100" y="28" class="uml-title font-bold">ConcreteStateC</text>
+                <text x="100" y="44" class="uml-small">(e.g., DispensingState)</text>
+                <line x1="0" y1="52" x2="200" y2="52" class="uml-divider"/>
+                <text x="15" y="74" class="uml-member">+ handle(context)</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- COMPONENT ROLE EXPLANATIONS BELOW DIAGRAM -->
+        <div class="uml-explanation-container">
+          <h3 class="explanation-title">🧩 Role of Each Component in the Pattern</h3>
+          <div class="grid grid-3">
+            <div class="card uml-role-card">
+              <div class="role-badge context-tag">1. Context</div>
+              <h4>Context (e.g., VendingMachine)</h4>
+              <p>
+                The primary class that clients interact with. It maintains an internal reference to a <code>State</code> object representing its current state.
+              </p>
+              <ul class="role-list">
+                <li>Delegates incoming requests directly to <code>currentState.handle()</code>.</li>
+                <li>Exposes a <code>setState(newState)</code> method so concrete states can trigger transitions.</li>
+              </ul>
+            </div>
+
+            <div class="card uml-role-card">
+              <div class="role-badge interface-tag">2. State Interface</div>
+              <h4>State Interface (VendingMachineState)</h4>
+              <p>
+                An interface or abstract class defining the common API contract for all state behaviors.
+              </p>
+              <ul class="role-list">
+                <li>Declares state-dependent methods (e.g., <code>insertMoney()</code>, <code>dispense()</code>).</li>
+                <li>Ensures all concrete state classes implement the exact same set of methods.</li>
+              </ul>
+            </div>
+
+            <div class="card uml-role-card">
+              <div class="role-badge state-tag">3. Concrete States</div>
+              <h4>Concrete States (ConcreteStateA, B, C)</h4>
+              <p>
+                Individual classes implementing the <code>State</code> interface. Each class contains custom logic for one specific state.
+              </p>
+              <ul class="role-list">
+                <li>Executes custom response logic when an action is invoked in that state.</li>
+                <li>Swaps the Context's active state object when valid conditions are met.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. REAL-WORLD VENDING MACHINE EXAMPLE -->
+    <section id="example" class="section bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>8. Real-World Example: Vending Machine</h2>
+          <p class="section-lead">Relating state transitions to physical everyday interactions.</p>
+        </div>
+        <div class="analogy-card">
+          <div class="analogy-grid">
+            <div class="analogy-item">
+              <span class="state-chip idle">1. IDLE</span>
+              <h4>Waiting for Customer</h4>
+              <p>The machine is waiting for coins/cash. You cannot press dispensing buttons yet because no money has been accepted.</p>
+            </div>
+            <div class="analogy-item">
+              <span class="state-chip money">2. HAS_MONEY</span>
+              <h4>Money Accepted</h4>
+              <p>The machine displays balance. Now you can select a snack or press "Cancel / Refund" to return cash.</p>
+            </div>
+            <div class="analogy-item">
+              <span class="state-chip selected">3. PRODUCT_SELECTED</span>
+              <h4>Product Reserved</h4>
+              <p>The machine verifies price & stock. You can now press "Dispense" to complete purchase.</p>
+            </div>
+            <div class="analogy-item">
+              <span class="state-chip dispensing">4. DISPENSING</span>
+              <h4>Releasing Item</h4>
+              <p>The mechanical motor spins, drops the snack, returns change, and automatically resets machine state back to IDLE.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. INTERACTIVE VENDING MACHINE SIMULATION -->
+    <section id="interactive-demo" class="section demo-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>9. Interactive Vending Machine Simulation</h2>
+          <p class="section-lead">Experience the State Pattern live! Test state transitions and invalid action handling.</p>
+        </div>
+
+        <!-- STATE DIAGRAM TRACKER (LIVE VISUALIZER) -->
+        <div class="state-flow-visualizer">
+          <div class="flow-node active" id="node-IDLE">
+            <div class="node-icon">💤</div>
+            <div class="node-name">IDLE</div>
+          </div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node" id="node-HAS_MONEY">
+            <div class="node-icon">💵</div>
+            <div class="node-name">HAS_MONEY</div>
+          </div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node" id="node-PRODUCT_SELECTED">
+            <div class="node-icon">🛒</div>
+            <div class="node-name">PRODUCT_SELECTED</div>
+          </div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node" id="node-DISPENSING">
+            <div class="node-icon">🎁</div>
+            <div class="node-name">DISPENSING</div>
+          </div>
+        </div>
+
+        <!-- SIMULATOR MAIN CONTAINER -->
+        <div class="simulator-grid">
+          <!-- LEFT: PHYSICAL VENDING MACHINE GRAPHIC -->
+          <div class="vm-cabinet">
+            <div class="vm-header-banner">
+              <span>SNACK & DRINK VENDOR</span>
+            </div>
+
+            <!-- VENDING MACHINE SCREEN -->
+            <div class="vm-display-screen">
+              <div class="vm-screen-row">
+                <span class="screen-label">CURRENT STATE:</span>
+                <span class="screen-value state-badge IDLE" id="displayStateBadge">IDLE</span>
+              </div>
+              <div class="vm-screen-row">
+                <span class="screen-label">LAST ACTION:</span>
+                <span class="screen-value" id="displayLastAction">Initialized Machine</span>
+              </div>
+              <div class="vm-screen-row">
+                <span class="screen-label">INSERTED BALANCE:</span>
+                <span class="screen-value" id="displayBalance">$0.00</span>
+              </div>
+              <div class="vm-screen-row">
+                <span class="screen-label">SELECTED ITEM:</span>
+                <span class="screen-value" id="displaySelectedItem">None</span>
+              </div>
+              <div class="vm-status-msg" id="displayStatusMsg">
+                System Ready. Insert money to start.
+              </div>
+            </div>
+
+            <!-- ITEM SHELVES -->
+            <div class="vm-shelves">
+              <div class="vm-item-card" id="itemCard-soda">
+                <div class="item-icon">🥤</div>
+                <div class="item-name">Sparkling Soda</div>
+                <div class="item-price">$1.50</div>
+                <div class="item-stock">In Stock: <span id="stock-soda">5</span></div>
+              </div>
+              <div class="vm-item-card" id="itemCard-chips">
+                <div class="item-icon">🍿</div>
+                <div class="item-name">Crispy Chips</div>
+                <div class="item-price">$1.00</div>
+                <div class="item-stock">In Stock: <span id="stock-chips">3</span></div>
+              </div>
+              <div class="vm-item-card" id="itemCard-candy">
+                <div class="item-icon">🍫</div>
+                <div class="item-name">Choco Bar</div>
+                <div class="item-price">$0.75</div>
+                <div class="item-stock">In Stock: <span id="stock-candy">4</span></div>
+              </div>
+            </div>
+
+            <!-- DISPENSER CHUTE -->
+            <div class="vm-chute">
+              <div class="chute-door" id="chuteDoor">
+                <span id="chuteLabel">PULL OPEN TO COLLECT</span>
+                <div class="dispensed-item-tray" id="dispensedTray"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: USER INTERACTION CONTROLS & EVENT LOG -->
+          <div class="vm-control-panel">
+            <div class="control-box">
+              <h3>🎮 User Controls</h3>
+              <p class="control-hint">Click the buttons below to trigger actions on the Vending Machine context.</p>
+
+              <!-- INSERT MONEY BUTTONS -->
+              <div class="control-group">
+                <label>1. Insert Money:</label>
+                <div class="btn-group">
+                  <button class="btn btn-ctrl" onclick="handleInsertMoney(0.50)">+$0.50 Coin</button>
+                  <button class="btn btn-ctrl" onclick="handleInsertMoney(1.00)">+$1.00 Bill</button>
+                  <button class="btn btn-ctrl" onclick="handleInsertMoney(2.00)">+$2.00 Bill</button>
+                </div>
+              </div>
+
+              <!-- SELECT PRODUCT BUTTONS -->
+              <div class="control-group">
+                <label>2. Select Product:</label>
+                <div class="btn-group">
+                  <button class="btn btn-ctrl" onclick="handleSelectProduct('Soda', 1.50)">Soda ($1.50)</button>
+                  <button class="btn btn-ctrl" onclick="handleSelectProduct('Chips', 1.00)">Chips ($1.00)</button>
+                  <button class="btn btn-ctrl" onclick="handleSelectProduct('Candy', 0.75)">Candy ($0.75)</button>
+                </div>
+              </div>
+
+              <!-- DISPENSE & CANCEL BUTTONS -->
+              <div class="control-group">
+                <label>3. Trigger Action:</label>
+                <div class="btn-group">
+                  <button class="btn btn-action-dispense" onclick="handleDispense()">⚙️ Dispense Product</button>
+                  <button class="btn btn-action-refund" onclick="handleRefund()">🚫 Cancel / Return Cash</button>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <button class="btn btn-secondary btn-sm" onclick="handleResetMachine()">🔄 Restock & Reset Machine</button>
+              </div>
+            </div>
+
+            <!-- EVENT & LOG CONSOLE -->
+            <div class="console-box">
+              <div class="console-header">
+                <span>📜 Pattern Event Console Log</span>
+                <button class="btn-text-sm" onclick="clearConsoleLog()">Clear Log</button>
+              </div>
+              <div class="console-body" id="consoleLog">
+                <div class="log-entry info">[SYSTEM] Vending Machine initialized in IDLE state.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. JAVA IMPLEMENTATION -->
+    <section id="java-impl" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>10. Java Implementation</h2>
+          <p class="section-lead">Clean, production-ready Java code implementing the State Pattern.</p>
+        </div>
+
+        <div class="code-viewer">
+          <div class="code-tabs" id="codeTabs" role="tablist" aria-label="Java Implementation Code Tabs">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-context" data-tab="tab-context">VendingMachine.java (Context)</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-interface" data-tab="tab-interface">VendingMachineState.java (Interface)</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-idle" data-tab="tab-idle">IdleState.java</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-money" data-tab="tab-money">HasMoneyState.java</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-selected" data-tab="tab-selected">ProductSelectedState.java</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-dispense" data-tab="tab-dispense">DispensingState.java</button>
+          </div>
+
+          <div class="tab-content active" id="tab-context">
+            <pre class="code-block"><code><span class="kw">public class</span> <span class="cls">VendingMachine</span> {
+    <span class="kw">private</span> VendingMachineState idleState;
+    <span class="kw">private</span> VendingMachineState hasMoneyState;
+    <span class="kw">private</span> VendingMachineState productSelectedState;
+    <span class="kw">private</span> VendingMachineState dispensingState;
+
+    <span class="kw">private</span> VendingMachineState currentState;
+    <span class="kw">private double</span> balance = <span class="num">0.0</span>;
+    <span class="kw">private String</span> selectedProduct = <span class="str">""</span>;
+
+    <span class="kw">public</span> <span class="fn">VendingMachine</span>() {
+        idleState = <span class="kw">new</span> IdleState();
+        hasMoneyState = <span class="kw">new</span> HasMoneyState();
+        productSelectedState = <span class="kw">new</span> ProductSelectedState();
+        dispensingState = <span class="kw">new</span> DispensingState();
+
+        currentState = idleState; <span class="cmt">// Default initial state</span>
+    }
+
+    <span class="cmt">// Delegates to current state object</span>
+    <span class="kw">public void</span> <span class="fn">insertMoney</span>(<span class="kw">double</span> amount) {
+        currentState.<span class="fn">insertMoney</span>(<span class="kw">this</span>, amount);
+    }
+
+    <span class="kw">public void</span> <span class="fn">selectProduct</span>(String product, <span class="kw">double</span> price) {
+        currentState.<span class="fn">selectProduct</span>(<span class="kw">this</span>, product, price);
+    }
+
+    <span class="kw">public void</span> <span class="fn">dispense</span>() {
+        currentState.<span class="fn">dispense</span>(<span class="kw">this</span>);
+    }
+
+    <span class="kw">public void</span> <span class="fn">refund</span>() {
+        currentState.<span class="fn">refund</span>(<span class="kw">this</span>);
+    }
+
+    <span class="cmt">// State mutation helpers</span>
+    <span class="kw">public void</span> <span class="fn">setState</span>(VendingMachineState newState) {
+        <span class="kw">this</span>.currentState = newState;
+    }
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+    <span class="kw">public void</span> <span class="fn">addBalance</span>(<span class="kw">double</span> amt) { <span class="kw">this</span>.balance += amt; }
+    <span class="kw">public void</span> <span class="fn">setBalance</span>(<span class="kw">double</span> amt) { <span class="kw">this</span>.balance = amt; }
+
+    <span class="kw">public</span> VendingMachineState <span class="fn">getIdleState</span>() { <span class="kw">return</span> idleState; }
+    <span class="kw">public</span> VendingMachineState <span class="fn">getHasMoneyState</span>() { <span class="kw">return</span> hasMoneyState; }
+    <span class="kw">public</span> VendingMachineState <span class="fn">getProductSelectedState</span>() { <span class="kw">return</span> productSelectedState; }
+    <span class="kw">public</span> VendingMachineState <span class="fn">getDispensingState</span>() { <span class="kw">return</span> dispensingState; }
+}</code></pre>
+          </div>
+
+          <div class="tab-content" id="tab-interface">
+            <pre class="code-block"><code><span class="kw">public interface</span> <span class="cls">VendingMachineState</span> {
+    <span class="kw">void</span> <span class="fn">insertMoney</span>(VendingMachine machine, <span class="kw">double</span> amount);
+    <span class="kw">void</span> <span class="fn">selectProduct</span>(VendingMachine machine, String product, <span class="kw">double</span> price);
+    <span class="kw">void</span> <span class="fn">dispense</span>(VendingMachine machine);
+    <span class="kw">void</span> <span class="fn">refund</span>(VendingMachine machine);
+}</code></pre>
+          </div>
+
+          <div class="tab-content" id="tab-idle">
+            <pre class="code-block"><code><span class="kw">public class</span> <span class="cls">IdleState</span> <span class="kw">implements</span> <span class="cls">VendingMachineState</span> {
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">insertMoney</span>(VendingMachine machine, <span class="kw">double</span> amount) {
+        machine.<span class="fn">addBalance</span>(amount);
+        System.out.<span class="fn">println</span>(<span class="str">"Accepted $"</span> + amount);
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getHasMoneyState</span>());
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">selectProduct</span>(VendingMachine machine, String product, <span class="kw">double</span> price) {
+        System.out.<span class="fn">println</span>(<span class="str">"Error: Insert money first!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">dispense</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Error: Insert money and select product first."</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">refund</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Error: No money to refund."</span>);
+    }
+}</code></pre>
+          </div>
+
+          <div class="tab-content" id="tab-money">
+            <pre class="code-block"><code><span class="kw">public class</span> <span class="cls">HasMoneyState</span> <span class="kw">implements</span> <span class="cls">VendingMachineState</span> {
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">insertMoney</span>(VendingMachine machine, <span class="kw">double</span> amount) {
+        machine.<span class="fn">addBalance</span>(amount);
+        System.out.<span class="fn">println</span>(<span class="str">"Added $"</span> + amount + <span class="str">". Total: $"</span> + machine.<span class="fn">getBalance</span>());
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">selectProduct</span>(VendingMachine machine, String product, <span class="kw">double</span> price) {
+        <span class="kw">if</span> (machine.<span class="fn">getBalance</span>() &lt; price) {
+            System.out.<span class="fn">println</span>(<span class="str">"Insufficient balance! Product costs $"</span> + price);
+            <span class="kw">return</span>;
+        }
+        System.out.<span class="fn">println</span>(<span class="str">"Product "</span> + product + <span class="str">" selected."</span>);
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getProductSelectedState</span>());
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">dispense</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Error: Select a product first."</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">refund</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Refunding $"</span> + machine.<span class="fn">getBalance</span>());
+        machine.<span class="fn">setBalance</span>(<span class="num">0</span>);
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getIdleState</span>());
+    }
+}</code></pre>
+          </div>
+
+          <div class="tab-content" id="tab-selected">
+            <pre class="code-block"><code><span class="kw">public class</span> <span class="cls">ProductSelectedState</span> <span class="kw">implements</span> <span class="cls">VendingMachineState</span> {
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">insertMoney</span>(VendingMachine machine, <span class="kw">double</span> amount) {
+        machine.<span class="fn">addBalance</span>(amount);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">selectProduct</span>(VendingMachine machine, String product, <span class="kw">double</span> price) {
+        System.out.<span class="fn">println</span>(<span class="str">"Updated selection to: "</span> + product);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">dispense</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Dispensing item..."</span>);
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getDispensingState</span>());
+        machine.<span class="fn">dispense</span>(); <span class="cmt">// Trigger dispensing logic</span>
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">refund</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Refunding $"</span> + machine.<span class="fn">getBalance</span>());
+        machine.<span class="fn">setBalance</span>(<span class="num">0</span>);
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getIdleState</span>());
+    }
+}</code></pre>
+          </div>
+
+          <div class="tab-content" id="tab-dispense">
+            <pre class="code-block"><code><span class="kw">public class</span> <span class="cls">DispensingState</span> <span class="kw">implements</span> <span class="cls">VendingMachineState</span> {
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">dispense</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Item successfully dropped into tray!"</span>);
+        machine.<span class="fn">setBalance</span>(<span class="num">0</span>);
+        <span class="cmt">// Transition back to IDLE after dispensing</span>
+        machine.<span class="fn">setState</span>(machine.<span class="fn">getIdleState</span>());
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">insertMoney</span>(VendingMachine machine, <span class="kw">double</span> amount) {
+        System.out.<span class="fn">println</span>(<span class="str">"Please wait, currently dispensing!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">selectProduct</span>(VendingMachine machine, String product, <span class="kw">double</span> price) {
+        System.out.<span class="fn">println</span>(<span class="str">"Please wait, currently dispensing!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="kw">public void</span> <span class="fn">refund</span>(VendingMachine machine) {
+        System.out.<span class="fn">println</span>(<span class="str">"Cannot refund during dispensing."</span>);
+    }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- CLASS EXPLANATIONS BELOW CODE VIEWER -->
+        <div class="java-explanations-container">
+          <h3 class="explanation-title">💡 Beginner-Friendly Class Breakdown</h3>
+          <div class="grid grid-3">
+            <div class="card java-class-card">
+              <span class="class-badge interface">Interface</span>
+              <h4>1. VendingMachineState</h4>
+              <p>The blueprint interface declaring <code>insertMoney</code>, <code>selectProduct</code>, <code>dispense</code>, and <code>refund</code> methods that every state must implement.</p>
+            </div>
+
+            <div class="card java-class-card">
+              <span class="class-badge state">State 1</span>
+              <h4>2. IdleState</h4>
+              <p>Initial state. Accepts money and switches state to <code>HasMoneyState</code>. Blocks product selection and dispensing since no money is inserted.</p>
+            </div>
+
+            <div class="card java-class-card">
+              <span class="class-badge state">State 2</span>
+              <h4>3. HasMoneyState</h4>
+              <p>Money has been inserted. Accepts product selection if balance and stock are valid, switching to <code>ProductSelectedState</code>. Allows refunding cash.</p>
+            </div>
+
+            <div class="card java-class-card">
+              <span class="class-badge state">State 3</span>
+              <h4>4. ProductSelectedState</h4>
+              <p>Product is reserved. Clicking <code>dispense()</code> switches state to <code>DispensingState</code>. Allows changing product selection or refunding cash.</p>
+            </div>
+
+            <div class="card java-class-card">
+              <span class="class-badge state">State 4</span>
+              <h4>5. DispensingState</h4>
+              <p>Item is being delivered into the chute. Rejects all actions while motor spins, returns change, and resets machine back to <code>IdleState</code>.</p>
+            </div>
+
+            <div class="card java-class-card">
+              <span class="class-badge context">Context</span>
+              <h4>6. VendingMachine</h4>
+              <p>The main machine class. Holds `currentState` reference and delegates all actions (`insertMoney`, `dispense`, etc.) directly to the active state class.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 & 12. ADVANTAGES & DISADVANTAGES -->
+    <section id="tradeoffs" class="section bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>11 & 12. Tradeoffs: Advantages vs Disadvantages</h2>
+          <p class="section-lead">Weighing the benefits against architectural overhead.</p>
+        </div>
+        <div class="grid grid-2">
+          <div class="card card-advantage">
+            <div class="card-icon">⚡</div>
+            <h3>11. Key Advantages</h3>
+            <ul class="styled-list check font-sm">
+              <li><strong>Single Responsibility Principle (SRP):</strong> Keeps code organized by isolating state-specific logic into distinct classes.</li>
+              <li><strong>Open/Closed Principle (OCP):</strong> Introduce new states without modifying existing state classes or context logic.</li>
+              <li><strong>Eliminates Conditionals:</strong> Replaces ugly, repetitive <code>if/else</code> or <code>switch</code> blocks with clean polymorphism.</li>
+              <li><strong>Explicit State Transitions:</strong> Makes state transition rules explicit rather than buried inside flag variables.</li>
+            </ul>
+          </div>
+
+          <div class="card card-disadvantage">
+            <div class="card-icon">⚠️</div>
+            <h3>12. Potential Disadvantages</h3>
+            <ul class="styled-list cross font-sm">
+              <li><strong>Class Explosion:</strong> Can be overkill if a machine only has 2 simple states that rarely change.</li>
+              <li><strong>Increased Complexity:</strong> Requires creating multiple small files and interfaces.</li>
+              <li><strong>Context Coupling:</strong> State classes need references back to the Context object to trigger state switches.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. WHEN TO USE STATE PATTERN -->
+    <section id="when-to-use" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>13. When to Use the State Pattern</h2>
+          <p class="section-lead">A practical checklist for software architects.</p>
+        </div>
+        <div class="checklist-card">
+          <div class="grid grid-2">
+            <div class="use-case">
+              <h4>✅ Use State Pattern When:</h4>
+              <ul class="check-list">
+                <li>You have an object whose behavior changes dynamically based on its internal state.</li>
+                <li>Your methods contain large multi-branch conditional statements (<code>if-else</code> / <code>switch</code>) dependent on state flags.</li>
+                <li>State transition rules are complex and need to be isolated and unit-tested independently.</li>
+                <li>Examples: Order Processing (Pending -> Paid -> Shipped -> Delivered), Audio Player (Playing -> Paused -> Stopped), Game AI (Idle -> Patrol -> Attack).</li>
+              </ul>
+            </div>
+            <div class="use-case">
+              <h4>⛔ Avoid State Pattern When:</h4>
+              <ul class="cross-list">
+                <li>The state machine has only 1 or 2 states with minimal state-dependent logic.</li>
+                <li>The states rarely change and simple boolean flags suffice.</li>
+                <li>Performance is ultra-critical and object instantiation overhead is a concern.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. QUIZ SECTION -->
+    <section id="quiz" class="section bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>14. Test Your Knowledge (Quiz)</h2>
+          <p class="section-lead">Answer the questions below to test your understanding of the State Pattern.</p>
+        </div>
+
+        <div class="quiz-wrapper" id="quizContainer">
+          <!-- Quiz Questions will be dynamically rendered / controlled via JS -->
+          <div class="quiz-card" id="quizCard">
+            <div class="quiz-header">
+              <span class="quiz-progress" id="quizProgress">Question 1 of 8</span>
+            </div>
+            <h3 id="quizQuestion" class="quiz-question">Loading Question...</h3>
+            <div class="quiz-options" id="quizOptions">
+              <!-- Options inserted via JS -->
+            </div>
+            <div class="quiz-feedback hidden" id="quizFeedback"></div>
+            <div class="quiz-footer">
+              <button class="btn btn-primary" id="btnNextQuestion" disabled>Next Question ➔</button>
+            </div>
+          </div>
+
+          <!-- Quiz Results Box -->
+          <div class="quiz-result-card hidden" id="quizResultCard">
+            <div class="result-icon">🏆</div>
+            <h3>Quiz Completed!</h3>
+            <p class="result-score">Your Score: <span id="finalScore">0</span> / 8</p>
+            <p id="resultMessage">Great effort!</p>
+            
+            <!-- Detailed Question-by-Question Review Breakdown -->
+            <div class="quiz-review-container" id="quizReviewContainer"></div>
+
+            <button class="btn btn-primary" onclick="restartQuiz()">Restart Quiz 🔄</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 15. FOOTER -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h3>🔄 State Pattern Interactive Guide</h3>
+        <p>An educational resource created to explain Gang of Four (GoF) design patterns clearly.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#hero">Back to Top ⬆️</a>
+        <a href="#interactive-demo">Vending Machine Demo</a>
+        <a href="#java-impl">Java Code</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 Educational Design Patterns Guide. Crafted with HTML5, CSS3, and Vanilla JavaScript.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
